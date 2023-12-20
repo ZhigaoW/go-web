@@ -7,9 +7,12 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
+		fmt.Fprint(w, "Welcome to my web site!")
 	})
 
-	// TCP链接，handler参数是nil表示使用DefaultServeMux
+	fs := http.FileServer(http.Dir("static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// TCP connection，when handler param is nil use DefaultServeMux
 	http.ListenAndServe(":80", nil)
 }
